@@ -1,0 +1,53 @@
+from bs4 import BeautifulSoup as soup
+from urllib.request import Request, urlopen
+import requests
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pandas import ExcelWriter
+from openpyxl.workbook import Workbook
+import xlrd
+import statsmodels.api as sm
+import seaborn as sns
+
+desired_width=320
+df = pd.read_excel(r'C:\Users\Sohail\Desktop\pl_2018.xlsx' , sheet_name='Arsenal_2018')
+df.set_index('Position',inplace=True)
+
+pd.set_option('display.width', desired_width)
+np.set_printoptions(linewidth=desired_width)
+pd.set_option('display.max_columns',25)
+
+df1 = df.loc['FWD']
+df2 = df.loc['MID']
+df3 = df.loc['DEF']
+
+X = df[["Touches","Shots"]]
+y = df["Goals"]
+'''
+model = sm.OLS(y,X).fit()
+predict = model.predict(X)
+
+print(model.summary())
+#print(df)
+'''
+#Touches,Shots=X ; Goals=Y
+'''
+fig = plt.figure()
+ax1 = fig.add_subplot(3,1,1)
+df1.plot(x = 'Player' , y = ['Touches','Passes','Dispossessed'],kind = 'barh',stacked=True,ax=ax1,legend=False)
+
+ax2 = fig.add_subplot(3,1,2)
+df2.plot(x = 'Player' , y = ['Touches','Passes','Dispossessed'],kind = 'barh',stacked=True,ax=ax2,legend=False)
+
+ax3 = fig.add_subplot(3,1,3)
+df3.plot(x = 'Player' , y = ['Touches','Passes','Dispossessed'],kind = 'barh',stacked=True,ax=ax3,legend=False)
+
+plt.show()
+'''
+
+sns.regplot(x = "Shots", y = "Goals",data = df)
+sns.regplot(x = "ShotsOT", y = "Goals",data = df)
+plt.show()
+
+
